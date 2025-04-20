@@ -1,9 +1,9 @@
 class AlignedAudioBlockProvider implements AudioListener {
   
   private boolean fromFile;
+  MultiChannelBuffer buffer;
+  private int filePointer = 0;
   
-  private AudioInput in;
-
   public int blockSize;
 
   private float[] internalLeft;
@@ -26,9 +26,12 @@ class AlignedAudioBlockProvider implements AudioListener {
     right = new float[blockSize];
   }
   
-  AlignedAudioBlockProvider(String filename, int blockSize) {
+  AlignedAudioBlockProvider(Minim minim, String filename, int blockSize) {
     initializeBuffers(blockSize);
     fromFile = true;
+    
+    buffer = new MultiChannelBuffer(0, 2);
+    minim.loadFileIntoBuffer(filename, buffer);
   }
   
   // we get our feed from LineIn
@@ -98,5 +101,17 @@ class AlignedAudioBlockProvider implements AudioListener {
   
   public synchronized void samples(float[] samp) {
      samples(samp, samp); 
+  }
+  
+  public void tick() {
+    if(!fromFile) return;
+    
+    // TODO advance
+  }
+  
+  public boolean hasFinished() {
+    if(!fromFile) return false;
+    
+    return filePointer >= buffer.getBufferSize();
   }
 }

@@ -10,14 +10,32 @@ Minim minim;
 
 int blockSize = 1024;
 
+boolean readFromFile = true;
+String fileName = "amen.wav";
+
+boolean renderVideo = false;
+
+void setupAudio() {
+  minim = new Minim(this);
+
+
+  if(!readFromFile) {
+    aabp = new AlignedAudioBlockProvider(minim.getLineIn(Minim.STEREO, blockSize, 48000), blockSize);
+  } else {
+    if(!renderVideo) {
+        AudioPlayer audioPlayer = minim.loadFile(fileName);
+        audioPlayer.loop();
+        aabp = new AlignedAudioBlockProvider(audioPlayer, blockSize);
+    }
+  }  
+}
+
 void setup() {
   size(1280, 720, P3D);
   frameRate(60);
   
-  minim = new Minim(this);
-  
-  aabp = new AlignedAudioBlockProvider(minim.getLineIn(Minim.STEREO, blockSize, 48000), blockSize);
-  
+  setupAudio();
+
 }
 
 void draw() {
