@@ -9,36 +9,44 @@ AlignedAudioBlockProvider aabp;
 Minim minim;
 
 int blockSize = 1024;
+int fps = 60;
 
-boolean readFromFile = true;
+// make sure, that the audio rate is the same as in the audio file!
+int audioSampleRate = 48000;
+
+boolean readFromFile = false;
 String fileName = "amen.wav";
 
 boolean renderVideo = false;
+String renderFilePattern = "render/render-######.png";
 
 void setupAudio() {
   minim = new Minim(this);
 
-
   if(!readFromFile) {
-    aabp = new AlignedAudioBlockProvider(minim.getLineIn(Minim.STEREO, blockSize, 48000), blockSize);
+    aabp = new AlignedAudioBlockProvider(minim.getLineIn(Minim.STEREO, blockSize, audioSampleRate), blockSize);
   } else {
     if(!renderVideo) {
-        AudioPlayer audioPlayer = minim.loadFile(fileName);
-        audioPlayer.loop();
-        aabp = new AlignedAudioBlockProvider(audioPlayer, blockSize);
+      AudioPlayer audioPlayer = minim.loadFile(fileName);
+      audioPlayer.loop();
+      aabp = new AlignedAudioBlockProvider(audioPlayer, blockSize);
+    } else {
+      aabp = new AlignedAudioBlockProvider(minim, fileName, blockSize);
     }
   }  
 }
 
 void setup() {
   size(1280, 720, P3D);
-  frameRate(60);
+  frameRate(fps);
   
   setupAudio();
 
 }
 
 void draw() {
+  aabp.update();
+  
   background(0);
   fill(255);
   noStroke();
@@ -49,5 +57,12 @@ void draw() {
     float x = map(i, 0, blockSize, 0, width);
     float y = map(left[i], 1, -1, 0, height);
     ellipse(x, y, 5, 5);
+  }
+  
+  if(renderVideo) {
+    if(aabp.hasFinished()) {
+      exit();
+    }
+    saveFrame(renderFilePattern);
   }
 }

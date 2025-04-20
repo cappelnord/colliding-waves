@@ -21,7 +21,7 @@ s.options.blockSize = 512;
 p = ProxySpace.push(s.boot, clock:TempoClock.default);
 
 s.waitForBoot {
-	~r = 48000/512;
+	r = 48000/512;
 	"All ready to go!".postln;
 	Safety.setLimit(1.0);
 };

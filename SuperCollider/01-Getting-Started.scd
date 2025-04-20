@@ -22,8 +22,13 @@ Shift Return (macOS, Windows, Linux)
 2 + 2;
 3 + 3;
 
-// sometimes you want to execute more than one line of code.
-// code can be combined into a
+// Blocks of code are surrounded by round brackets
+
+(
+var a = 5;
+var b = 10;
+a + b;
+)
 
 /*
 Practice how to stop a sound; if things get loud by accident it is important to remember to key combination:

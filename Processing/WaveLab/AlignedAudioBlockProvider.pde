@@ -103,15 +103,38 @@ class AlignedAudioBlockProvider implements AudioListener {
      samples(samp, samp); 
   }
   
-  public void tick() {
+  public void update() {
     if(!fromFile) return;
     
-    // TODO advance
+    int targetSample = (int) ((frameCount+1) * (audioSampleRate / (float) fps));
+    
+    int numSamples = targetSample - filePointer;
+    
+    float[] feedLeft = new float[numSamples];
+    float[] feedRight = new float[numSamples];
+    
+    for(int i = 0; i < numSamples; i++) {
+      if(filePointer >= buffer.getBufferSize() - 1) {
+        break;
+      }
+      filePointer++;
+      
+      feedLeft[i] = buffer.getSample(0, filePointer);
+      if(buffer.getChannelCount() > 1) {
+        feedRight[i] = buffer.getSample(1, filePointer);
+      } else {
+        // read channel 0 into right as well
+        feedRight[i] = buffer.getSample(0, filePointer);
+      }
+    }
+    
+    feed(feedLeft, feedRight);
+    
   }
   
   public boolean hasFinished() {
     if(!fromFile) return false;
     
-    return filePointer >= buffer.getBufferSize();
+    return filePointer >= buffer.getBufferSize() -1;
   }
 }
