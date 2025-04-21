@@ -1,10 +1,7 @@
 import java.io.*;
 import java.util.Date.*;
 import java.text.SimpleDateFormat;
-import ddf.minim.analysis.*;
-import ddf.minim.*;
 
-// import codeanticode.syphon.*;
 
 public static String getStackTrace(final Throwable throwable) {
   final StringWriter sw = new StringWriter();
@@ -15,12 +12,9 @@ public static String getStackTrace(final Throwable throwable) {
 
 class AudioLiveShader {
 
-  // Syphon Support
-  // SyphonServer syphon;
-  
   private AudioLiveShaderHost host;
 
-  final static String vertexShaderFilename = "vert.vs";
+  final static String vertexShaderFilename = "data/shaders/vert.vs";
 
   private int texturePingPong = 0;
   private PGraphics textures[];
@@ -38,10 +32,6 @@ class AudioLiveShader {
   int width;
   int height;
   
-  private boolean videoMode = false;
-  private String videoName;
-  private int videoFPS;
-  private int videoFrameCount;
 
   public AudioLiveShader(AudioLiveShaderHost host, int width, int height, String filename) {
     
@@ -65,26 +55,20 @@ class AudioLiveShader {
     setShaderFile(filename);
   }
   
-  public void enableVideoOutput(String name, int fps) {
-    videoMode = true;
-    videoName = name;
-    videoFPS = fps;
-    videoFrameCount = 0;
-  }
-  
+
   public void setShaderFile(String filename) {
     this.filename = filename;
     updateShader();
   }
 
-  /*
-  public void enableSyphon(String name) {
-    syphon = new SyphonServer(AudioLiveShaderHost.main, name);
-  }
-  */
 
   private void updateShader() {
     File file = new File(sketchPath(filename));
+    
+    if(file.lastModified() == 0) {
+      println("Does the shader file actually exist?");
+    }
+
     if (file.lastModified() > shaderLastModified) {
       shaderLastModified = file.lastModified();
       error = null;
@@ -101,12 +85,12 @@ class AudioLiveShader {
         program.set("width", (float) this.width);
         program.set("height", (float) this.height);
         
-        if(!videoMode) {
-          program.set("time", (float) millis() / 1000.0);
+        if(renderVideo) {
+          program.set("time", (float) frameCount / fps);
           program.set("frameCount", (float) frameCount);
         } else {
-          program.set("time", (float) videoFrameCount / (float) videoFPS);
-          program.set("frameCount", (float) videoFrameCount);
+          program.set("time", (float) millis() / 1000.0);
+          program.set("frameCount", (float) frameCount);
         }
         
         for(String key : uniforms.keySet()) {
@@ -122,9 +106,9 @@ class AudioLiveShader {
 
   public void render() {
     host.update();
-
+    
     PGraphics tryTexture = textures[texturePingPong % 2];
-
+    
     // try
     updateShader();
     setUniforms(tryTexture);
@@ -147,20 +131,11 @@ class AudioLiveShader {
     }
     */
     
-    if (videoMode) {
+    /* if (videoMode) {
       saveVideoFrame();
-    }
+    } */
   }
   
-  private void saveVideoFrame() {
-    // check if output directory is there and if not create it
-    File f = new File("videos/" + videoName);
-    if(!f.isDirectory()) {
-      f.mkdir();
-    }
-    snapshot("videos/" + videoName + "/" + videoName + "-" + nf(videoFrameCount, 6) + ".png");
-    videoFrameCount++;
-  }
   
   public void snapshot(String filename) {
     texture.save(filename);

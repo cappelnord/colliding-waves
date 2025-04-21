@@ -1,16 +1,14 @@
 static class AudioLiveShaderHost {
   
   private PApplet main;
-  private AlignedAudioBlockProvider aabp;
+  public AlignedAudioBlockProvider aabp;
 
   public static PGraphics tex;
   
   final static int audioTextureBandwidth = 1;
 
   private static int lastProcessedFrame = -1;
-  
-  // private static float audioLevel;
-  // public static float audioRunningLevelSum = 0.0;
+
 
   AudioLiveShaderHost(PApplet main, AlignedAudioBlockProvider aabp) {
     this.main = main;
@@ -21,14 +19,6 @@ static class AudioLiveShaderHost {
   private int simpleValueFromAudioSample(float sample) {
     int ret = (int) (sample * 127.0 + 127);
     return ret;
-  }
-
-  private int simpleValueFromFFTBin(float sample) {
-    double ret = Math.sqrt((double) sample / 32.0);
-    if (ret > 1.0) {
-      ret = 1.0;
-    }
-    return (int) (ret * 256);
   }
 
   private void drawSimpleAudioTexture() {
@@ -50,14 +40,6 @@ static class AudioLiveShaderHost {
       return;
     }
 
-    // audioLevel = (input.left.level() + input.right.level()) * 0.5;
-    
-    // audioRunningLevelSum += audioLevel;
-    
-    // if(audioRunningLevelSum > 1000.0) {
-    //   audioRunningLevelSum -= 1000.0;
-    // }
-
     tex.noSmooth();
     tex.beginDraw();
     tex.background(0);
@@ -69,8 +51,6 @@ static class AudioLiveShaderHost {
   // this should never fail, try before!
   
   public static void setUniforms(PShader program) {
-    // program.set("level", audioLevel);
-    // program.set("runningLevelSum", audioRunningLevelSum);
     program.set("audioTexture", tex);
   }
 }

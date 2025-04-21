@@ -8,14 +8,20 @@ import ddf.minim.ugens.*;
 AlignedAudioBlockProvider aabp;
 Minim minim;
 
+AudioLiveShaderHost host;
+AudioLiveShader shader;
+
 int blockSize = 1024;
 int fps = 60;
 
 // make sure, that the audio rate is the same as in the audio file!
 int audioSampleRate = 48000;
 
-boolean readFromFile = false;
+boolean readFromFile = true;
 String fileName = "amen.wav";
+
+boolean drawShader = true;
+String fragmentShaderFile = "data/shaders/frag-interference.fs";
 
 boolean renderVideo = false;
 String renderFilePattern = "render/render-######.png";
@@ -36,11 +42,17 @@ void setupAudio() {
   }  
 }
 
+void setupShader() {
+  host = new AudioLiveShaderHost(this, aabp);
+  shader = new AudioLiveShader(host, width, height, fragmentShaderFile);
+}
+
 void setup() {
   size(1280, 720, P3D);
   frameRate(fps);
   
   setupAudio();
+  setupShader();
 
 }
 
@@ -59,10 +71,22 @@ void draw() {
     ellipse(x, y, 5, 5);
   }
   
+  if(drawShader) {
+    shader.render();
+    image(shader.texture, 0, 0);
+  }
+  
+  
   if(renderVideo) {
     if(aabp.hasFinished()) {
       exit();
     }
     saveFrame(renderFilePattern);
+  }
+  
+  if(shader.hasError()) {
+    fill(255, 0, 0);
+    stroke(255, 0, 0);
+    shader.displayError(0, 0);
   }
 }
