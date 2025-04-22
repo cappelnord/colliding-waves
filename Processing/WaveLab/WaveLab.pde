@@ -17,11 +17,11 @@ int fps = 60;
 // make sure, that the audio rate is the same as in the audio file!
 int audioSampleRate = 48000;
 
-boolean readFromFile = true;
+boolean readFromFile = false;
 String fileName = "amen.wav";
 
 boolean drawShader = true;
-String fragmentShaderFile = "data/shaders/frag-interference.fs";
+String fragmentShaderFile = "data/shaders/frag-stereo-ikeda.fs";
 
 boolean renderVideo = false;
 String renderFilePattern = "render/render-######.png";
@@ -62,18 +62,26 @@ void draw() {
   background(0);
   fill(255);
   noStroke();
+  
+  /*
   float[] left = aabp.getLeft();
   float[] right = aabp.getRight();
-  
+
   for(int i = 0; i < aabp.blockSize; i++) {
     float x = map(i, 0, blockSize, 0, width);
     float y = map(left[i], 1, -1, 0, height);
     ellipse(x, y, 5, 5);
   }
+  */
+  
   
   if(drawShader) {
-    shader.render();
-    image(shader.texture, 0, 0);
+    if(shader.hasError()) {
+      shader.displayError(0, 0);
+    } else {
+      shader.render();
+      image(shader.texture, 0, 0);
+    }
   }
   
   

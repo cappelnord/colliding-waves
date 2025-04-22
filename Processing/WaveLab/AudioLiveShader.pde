@@ -100,6 +100,7 @@ class AudioLiveShader {
     } 
     catch(RuntimeException e) {
       error = e.getMessage();
+      println(error);
       program = oldProgram;
     }
   }

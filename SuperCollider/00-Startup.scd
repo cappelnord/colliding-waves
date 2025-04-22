@@ -11,19 +11,22 @@ MAKE SURE THAT THE SAFETY NET QUARK IS INSTALLED
 */
 
 (
+// execute here!
+
 s.options.sampleRate = 48000;
 
 // a block size that large is generally not suggested for SuperCollider
-// but it makes our wave interference experiments a bit easier to observe.
+// but it makes our wave interference experiments easier to observe ...
 
 s.options.blockSize = 512;
 
-p = ProxySpace.push(s.boot, clock:TempoClock.default);
+p = ProxySpace.push(s.reboot, clock:TempoClock.default);
 
 s.waitForBoot {
 	r = 48000/512;
 	"All ready to go!".postln;
 	Safety.setLimit(1.0);
+	s.scope;
 };
 )
 
