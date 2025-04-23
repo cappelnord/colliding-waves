@@ -3,6 +3,10 @@
 // Let's not forget our scope
 s.scope
 
+// smooth fade-over of changes
+~beats.fadeTime = 5;
+
+
 /* Simple Sine Wave Interference (Beats) */
 
 (
@@ -11,11 +15,8 @@ s.scope
 	var sig = SinOsc.ar(r) + SinOsc.ar(r + 0) * 0.25;
 	sig.dup; // Stereo
 };
-)
-
-~beats.fadeTime = 2;
-
 ~beats.play;
+)
 
 
 (
@@ -24,6 +25,7 @@ s.scope
 	var sig = SinOsc.ar(r) + SinOsc.ar(r + 1) * 0.25;
 	sig.dup; // Duplicate to Stereo
 };
+~beats.play;
 )
 
 // At what point do we still hear a beats and when
@@ -38,6 +40,7 @@ s.scope
 	var sig = SinOsc.ar(r - 0.5) + SinOsc.ar(r + 0.5) * 0.25;
 	sig.dup; // Duplicate to Stereo
 };
+~beats.play;
 )
 
 
@@ -52,6 +55,7 @@ s.scope
 	var sig = w1 + w2 + w3 * 0.25;
 	sig.dup; // Duplicate to Stereo
 };
+~beats.play;
 )
 
 
@@ -60,11 +64,12 @@ s.scope
 
 ~beats = {
 	var w1 = SinOsc.ar(r * 3 + SinOsc.ar(0.42).range(-0.4, 0.4));
-	var w2 = SinOsc.ar(r * 2 + SinOsc.ar(0.51).range(-0.5, 0.5));
+	var w2 = SinOsc.ar(r * 2.5 + SinOsc.ar(0.51).range(-0.5, 0.5));
 	var w3 = SinOsc.ar(r * 1 + SinOsc.ar(0.33).range(-0.6, 0.6));
 	var sig = w1 + w2 + w3 * 0.25;
 	sig.dup; // Duplicate to Stereo
 };
+~beats.play;
 )
 
 // ...

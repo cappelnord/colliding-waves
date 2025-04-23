@@ -63,10 +63,11 @@ void draw() {
   fill(255);
   noStroke();
   
-  /*
+  
   float[] left = aabp.getLeft();
   float[] right = aabp.getRight();
 
+/*
   for(int i = 0; i < aabp.blockSize; i++) {
     float x = map(i, 0, blockSize, 0, width);
     float y = map(left[i], 1, -1, 0, height);
@@ -74,6 +75,15 @@ void draw() {
   }
   */
   
+  /*
+  for(int i = 0; i < aabp.blockSize; i = i + 1) {
+    float x = map(i, 0, blockSize, 0, width);
+    float y = map(left[i], 1, -1, 0, height);
+    ellipse(x, height/2, 5, 2000 * left[i]);
+  }
+  */
+    
+    
   
   if(drawShader) {
     if(shader.hasError()) {

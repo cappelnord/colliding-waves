@@ -56,7 +56,7 @@ Array.exprand(16, 100.0, 1000.0);
 // Many many Impulse oscillators having a similar effect
 (
 ~cluster = {
-	var freqs = Array.series(128, 50, 0.001);
+	var freqs = Array.series(128, r, 0.001);
 	var signals = Impulse.ar(freqs);
 	Splay.ar(signals) * 0.25;
 };
@@ -69,7 +69,7 @@ s.scope
 // we can also just specify a number of frequencies manually :)
 (
 ~cluster = {
-	var freqs = [50, 55.1, 200, 240];
+	var freqs = [50, 55, 200, 240];
 	var signals = SinOsc.ar(freqs);
 	Splay.ar(signals) * 0.25;
 };
