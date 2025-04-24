@@ -1,5 +1,4 @@
 
-s.boot;
 
 ~sound.fadeTime = 0
 
@@ -17,6 +16,12 @@ s.boot;
 };
 ~sound.play;
 )
+
+/*
+To do more complex envelopes we can use Env and EnvGen. Many popular
+envelope shapes are already implemented within SuperCollider but you
+can also define your own envelopes by specifying breakpoints.
+*/
 
 // Command D (macOS ) // Ctrl D (Windows / Linux)
 
