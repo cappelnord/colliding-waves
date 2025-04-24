@@ -11,20 +11,24 @@ Minim minim;
 AudioLiveShaderHost host;
 AudioLiveShader shader;
 
+
 int blockSize = 1024;
 int fps = 60;
 
 // make sure, that the audio rate is the same as in the audio file!
 int audioSampleRate = 48000;
 
-boolean readFromFile = false;
-String fileName = "amen.wav";
+
+boolean readFromFile = false; // if you want to read your audio from a file then set this to true
+String fileName = "amen.wav"; // copy your audio file into the Sketches data folder and set the name here
 
 boolean drawShader = true;
 String fragmentShaderFile = "data/shaders/frag-stereo-ikeda.fs";
 
-boolean renderVideo = false;
+boolean renderVideo = false; // you can render visuals for your audio file to a video
 String renderFilePattern = "render/render-######.png";
+
+// you can set the video resolution further down in the setup function
 
 void setupAudio() {
   minim = new Minim(this);
@@ -100,6 +104,7 @@ void draw() {
       exit();
     }
     saveFrame(renderFilePattern);
+    println("saved a frame ...");
   }
   
   if(shader.hasError()) {
