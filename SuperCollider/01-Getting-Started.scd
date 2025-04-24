@@ -48,3 +48,13 @@ s.boot;
 {SinOsc.ar(440).dup * 0.1}.play;
 
 // Practice this. Memorize it. Sounds can get loud - you will need it!
+
+
+/*
+The help is your friend! A convenient way to get help is to
+use to shortcut Cmd D / Ctrl D when your cursor is on the name of a Ugen.
+
+Try it:
+*/
+
+LFSaw
