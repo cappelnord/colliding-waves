@@ -1,3 +1,9 @@
+/*
+This is a very different approach to SuperCollider than we looked
+at the other days. Here the instrument and the pattern/score are seperated. It's better suited to do percusive sounds (or any music that is better represented as separate sound events)
+*/
+
+// We have a SynthDef with different arguments.
 (
 SynthDef(\pling, {|out=0, freq=440, pan=0, amp=0.1|
 	var sig = Saw.ar(freq) + Saw.ar(freq + 1);
@@ -8,6 +14,29 @@ SynthDef(\pling, {|out=0, freq=440, pan=0, amp=0.1|
 	Out.ar(out, sig * amp);
 }).add;
 )
+
+/*
+We can play the SynthDef using a pattern.
+Patterns are their own world in SuperCollider - if
+you want to get started best search in the SuperCollider
+documentation for "Pattern Guide".
+*/
+
+(
+Pdef(\sequence, Pbind(
+	\instrument, \pling,
+	\dur, 1/4,
+	\octave, Pseq([3, 4, 5], inf),
+	\scale, Scale.chromatic,
+	\degree, Prand([0, 2, 4, 7, 11], inf),
+	\amp, 0.4
+)).play;
+);
+
+/*
+This is an example for a simple drum sampler; also played
+by a very simple pattern.
+*/
 
 b = Buffer.read(s, "/Users/patri/Dropbox/Audiosamples/TR808WAV/BD/BD0050.WAV");
 
@@ -20,24 +49,11 @@ SynthDef(\kick, {|out=0, freq=440, pan=0, amp=0.1, buffer=0|
 }).add;
 )
 
-(instrument: \kick, buffer: b, amp: 1).play
-
 (
-Pdef(\sequence, Pbind(
-	\instrument, \pling,
-	\dur, 1/4,
-	\octave, Pseq([3, 4, 5], inf),
-	\scale, Scale.chromatic,
-	\degree, Prand([0, 2, 4, 7, 11], inf),
-	\amp, 0.4
-)).play;
-
 Pdef(\kick, Pbind(
 	\instrument, \kick,
 	\buffer, b,
 	\dur, 1/2,
 	\amp, 1
 )).play;
-
-);
-
+)
